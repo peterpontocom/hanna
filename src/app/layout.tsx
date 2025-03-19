@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-AO" className={`${poppins.variable} antialiased`}>
-      <body className="">{children}</body>
+      <body cz-shortcut-listen="true">{children}</body>
     </html>
   );
 }
