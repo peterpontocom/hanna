@@ -1,7 +1,9 @@
+import { Header } from "@/components/layout/header";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Hello world!</h1>
+    <div className="px-20 py-4">
+      <Header />
     </div>
   );
 }
