@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter-sans",
+  subsets: ["latin"],
+});
+const poppins = Poppins({
+  variable: "--font-poppins",
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
 });
 
@@ -18,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-AO">
-      <body className={`${inter.variable} antialiased`}>{children}</body>
+    <html lang="pt-AO" className={`${poppins.variable} antialiased`}>
+      <body className="">{children}</body>
     </html>
   );
 }
