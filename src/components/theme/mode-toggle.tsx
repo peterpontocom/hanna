@@ -17,8 +17,11 @@ export function ModeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
-          <span className="">Mudar de Tema</span>
+        <Button
+          variant="outline"
+          className="text-muted-foreground flex items-center gap-2"
+        >
+          Tema
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
