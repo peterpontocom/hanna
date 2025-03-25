@@ -10,11 +10,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { ChatSection } from "@/components/section/chat-section";
+import type { MessageProps } from "@/components/ui/message";
 
 const formSchema = z.object({
   message: z.string(),
 });
 
+type FormData = z.infer<typeof formSchema>;
 type State = {
   newConversation: boolean;
 };
@@ -31,12 +34,15 @@ const reducer = (state: State, action: Action) => {
 };
 
 export default function Home() {
-  // Estado inicial fixo
-  const [state, dispatch] = useReducer(reducer, { newConversation: true });
-  const [messageContent, setMessageContent] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
+  const messages = localStorage.getItem("messages")
+    ? (JSON.parse(localStorage.getItem("messages")!) as MessageProps[])
+    : [];
 
-  // Atualiza o estado com base no localStorage apenas no cliente
+  const [state, dispatch] = useReducer(reducer, { newConversation: true });
+  const [chatMessages, setChatMessages] = useState<MessageProps[]>(messages);
+  const [messageContent, setMessageContent] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const savedState = localStorage.getItem("newConversation");
     if (savedState) {
@@ -45,27 +51,36 @@ export default function Home() {
         payload: JSON.parse(savedState).newConversation,
       });
     }
-    setIsLoading(false); // Finaliza o carregamento
+    setIsLoading(false);
   }, []);
 
-  // Salva o estado no localStorage quando ele muda
   useEffect(() => {
     localStorage.setItem("newConversation", JSON.stringify(state));
   }, [state]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       message: "",
     },
   });
-
+  useEffect(() => {
+    localStorage.setItem("messages", JSON.stringify(chatMessages));
+  }, [chatMessages]);
   function startConversation() {
     dispatch({ type: "update", payload: false });
+    if (!localStorage.getItem("messages")) {
+      localStorage.setItem("messages", JSON.stringify([]));
+    } else {
+      setChatMessages((state) => [
+        ...state,
+        { id: String(chatMessages.length + 1), content: messageContent },
+      ]);
+    }
+
     setMessageContent("");
   }
 
-  // Enquanto está carregando, exibe um estado de carregamento
   if (isLoading) {
     return <div>Carregando...</div>;
   }
@@ -73,13 +88,11 @@ export default function Home() {
   return (
     <div className="grid h-[700px] grid-rows-[min-content_1fr_min-content] gap-4 p-5 py-4 md:h-[600px] md:px-10 lg:h-[600px] lg:px-20">
       <Header newConversation={state.newConversation} dispatch={dispatch} />
-      <main className="flex items-center">
+      <main className="">
         {state.newConversation ? (
           <WelcomeSection />
         ) : (
-          <div>
-            <div>Tudo em cima!</div>
-          </div>
+          <ChatSection messages={chatMessages} />
         )}
       </main>
       <footer>
