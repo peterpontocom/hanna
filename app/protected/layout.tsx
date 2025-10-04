@@ -9,8 +9,7 @@ export default function ProtectedLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="min-h-screen">
-        <SidebarTrigger />
+      <main className="min-h-screen flex-1 p-4">
         <div className="flex-1">{children}</div>
       </main>
     </SidebarProvider>

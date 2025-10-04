@@ -68,7 +68,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex gap-1 p-3 bg-muted rounded-lg">
+        <div className="flex gap-1 p-3 bg-muted rounded-lg border border-zinc-200 dark:border-zinc-700">
           <Avatar className="size-9">
             <AvatarImage src="https://github.com/peterpontocom.png" />
             <AvatarFallback>PP</AvatarFallback>
